@@ -1,4 +1,4 @@
-// TH2 | 23655541 | NGUYEN HOAI THUONG | #STAMP
+// TH2 | 23655541 | NGUYEN HOAI THUONG | #394914
 
 import React from 'react';
 import { StatusBar } from 'react-native';
