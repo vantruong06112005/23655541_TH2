@@ -1,4 +1,4 @@
-**NGUYEN HOAI THUONG** | MSSV 23655541 | https://github.com/vantruong06112005/23655541_TH2.git | Stamp #394914 | Số cuối 1: watermark dưới, phone, Shop→Giỏ→Tôi, haptic selection, phí B, Detail card
+**NHUYỄN HOÀI THƯƠNG** | MSSV 23655541 | https://github.com/vantruong06112005/23655541_TH2.git | Stamp #394914 | Số cuối 1: watermark dưới, phone, Shop→Giỏ→Tôi, haptic selection, phí B, Detail card
 
 # KTXGo - Thực hành 2
 
