@@ -22,6 +22,12 @@ export const VARIANT = {
   detailPresentation: LAST_DIGIT >= 5 ? 'modal' : 'card',
 } as const;
 
+export function calculateShippingFee(distanceKm: number): number {
+  return VARIANT.shipFormula === 'A'
+    ? BASE_SHIP_FEE + Math.round(distanceKm * 2000)
+    : BASE_SHIP_FEE + Math.round(distanceKm * 1500) + 2000;
+}
+
 export function examStamp(): string {
   const raw = `TH2|${STUDENT.mssv}|${STUDENT.hoTen}`;
   let hash = 5381;

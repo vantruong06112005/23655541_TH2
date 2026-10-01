@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import {
-  BASE_SHIP_FEE,
+  calculateShippingFee,
   ROOM_LABEL,
   STUDENT,
   VARIANT,
@@ -16,9 +16,7 @@ export function MeScreen() {
     useCampusLocation();
   const signOut = useAuthStore(state => state.signOut);
   const shipping =
-    distanceKm === null
-      ? null
-      : BASE_SHIP_FEE + Math.round(distanceKm * 1500) + 2000;
+    distanceKm === null ? null : calculateShippingFee(distanceKm);
   return (
     <SafeAreaView style={styles.page}>
       {VARIANT.watermarkAtTop && <Watermark />}

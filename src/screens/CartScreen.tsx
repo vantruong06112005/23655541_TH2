@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useCartStore } from '@stores/cartStore';
 import {
-  BASE_SHIP_FEE,
+  calculateShippingFee,
   ROOM_LABEL,
   STUDENT,
   VARIANT,
@@ -22,10 +22,7 @@ export function CartScreen() {
   const { items, changeQty, remove, totalQuantity, totalAmount } =
     useCartStore();
   const { distanceKm } = useCampusLocation();
-  const shipping =
-    distanceKm === null
-      ? 0
-      : BASE_SHIP_FEE + Math.round(distanceKm * 1500) + 2000;
+  const shipping = distanceKm === null ? 0 : calculateShippingFee(distanceKm);
   return (
     <SafeAreaView style={styles.page}>
       {VARIANT.watermarkAtTop && <Watermark />}
