@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Linking,
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import {
   BASE_SHIP_FEE,
   ROOM_LABEL,
