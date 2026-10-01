@@ -1,13 +1,12 @@
 import React from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import type { Product } from '@services/productApi';
-import { PRICE_MULTIPLIER } from '@constants/student';
 import { theme } from '@constants/theme';
 
 type Props = { product: Product; onPress: () => void; onAdd: () => void };
 
 export function ProductCard({ product, onPress, onAdd }: Props) {
-  const price = Math.round(product.price * PRICE_MULTIPLIER);
+  const price = product.price;
   return (
     <Pressable onPress={onPress} style={styles.card}>
       <Image source={{ uri: product.image }} style={styles.image} />

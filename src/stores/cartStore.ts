@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { PRICE_MULTIPLIER, STUDENT } from '@constants/student';
+import { STUDENT } from '@constants/student';
 import type { Product } from '@services/productApi';
 
 export type CartItem = Product & { quantity: number };
@@ -29,7 +29,7 @@ export const useCartStore = create<CartState>()(
       remove: id => set(state => ({ items: state.items.filter(item => item.id !== id) })),
       changeQty: (id, quantity) => set(state => ({ items: quantity > 0 ? state.items.map(item => item.id === id ? { ...item, quantity } : item) : state.items.filter(item => item.id !== id) })),
       totalQuantity: () => get().items.reduce((total, item) => total + item.quantity, 0),
-      totalAmount: () => get().items.reduce((total, item) => total + Math.round(item.price * PRICE_MULTIPLIER) * item.quantity, 0),
+      totalAmount: () => get().items.reduce((total, item) => total + item.price * item.quantity, 0),
     }),
     {
       name: `ktxgo-cart-${STUDENT.mssv}`,

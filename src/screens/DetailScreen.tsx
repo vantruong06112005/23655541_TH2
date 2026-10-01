@@ -10,7 +10,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { fetchProducts } from '@services/productApi';
 import { useCartStore } from '@stores/cartStore';
-import { PRICE_MULTIPLIER, STUDENT, VARIANT } from '@constants/student';
+import { STUDENT, VARIANT } from '@constants/student';
 import { theme } from '@constants/theme';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { ShopStackParamList } from '@navigation/ShopStack';
@@ -34,7 +34,7 @@ export function DetailScreen({ route }: Props) {
       <Text style={styles.category}>{product.category}</Text>
       <Text style={styles.title}>{product.title}</Text>
       <Text style={styles.price}>
-        {Math.round(product.price * PRICE_MULTIPLIER).toLocaleString('vi-VN')} đ
+        {product.price.toLocaleString('vi-VN')} đ
       </Text>
       <Text style={styles.description}>{product.description}</Text>
       <Pressable onPress={addToCart} style={styles.button}>

@@ -104,7 +104,7 @@ export function HomeScreen({ navigation }: Props) {
           }
           contentContainerStyle={styles.list}
         />
-      )}{' '}
+      )}
       {!VARIANT.watermarkAtTop && <Watermark />}
     </SafeAreaView>
   );
