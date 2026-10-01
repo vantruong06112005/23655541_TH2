@@ -1,0 +1,343 @@
+﻿Mẫu: 2a_ĐTTL
+TRƯỜNG ĐẠI HỌC CÔNG NGHIỆP
+THÀNH PHỐ HỒ CHÍ MINH
+KHOA/VIỆN: CN ĐIỆN TỬ
+ĐỀ KIỂM TRA THỰC HÀNH 2
+Môn thi: LẬP TRÌNH CHO THIẾT BỊ DI ĐỘNG (TH)
+Lớp/Lớp học phần: ……………………
+Ngày kiểm tra: 22/10/2026
+Thời gian làm bài: 120 phút
+(Không kể thời gian phát đề)
+Họ và tên thí sinh: …………………………………………    MSSV: ……………………
+LINK GITHUB NỘP BÀI  (clone HTTPS)  —  tự tạo repo MSSV_TH2 trong giờ thi
+https://github.com/……………………………………………………………………………………
+Ví dụ đúng: https://github.com/tenban/22612345_TH2.git  —  tên repo = MSSV_TH2. Không dán link / repo trống / link không mở được = không có bài.
+Mô tả bài toán
+Ký túc xá mở dịch vụ giao đồ tận phòng tên KTXGo. Sinh viên đặt đồ ăn, nước, văn phòng phẩm trên điện thoại; shipper nội khu mang đến đúng tầng / phòng — có giỏ nhiều món, có ước tính phí ship theo khoảng cách GPS, không thanh toán online trong giờ thi.
+Bạn dựng một app React Native chạy trên máy ảo với: Auth Stack (Đăng nhập) → Main Tabs (Cửa hàng · Giỏ · Tôi); trong tab Cửa hàng có Stack Home (lưới 2 cột) → Chi tiết; giỏ Zustand + Persist; list món React Query + Axios; màn Tôi xin quyền Location + Haptic. Ba câu là cùng một project.
+Phạm vi: Chương 4 (Flexbox, FlashList 2 cột, Debounce, Pull-to-refresh, SafeArea) · Chương 5 (React Navigation V7 — Stack + Tabs + Auth) · Chương 6 (Zustand persist, React Query, Axios) · Chương 7 (Permissions Location, Haptic, Linking.openSettings).
+Tài liệu được phép sử dụng
+Đề thi được dùng tài liệu:
+https://thayduy.github.io/react-native-thuc-chien/docs/CHUONG_4_LT_MOI
+https://thayduy.github.io/react-native-thuc-chien/docs/CHUONG_5_LT_MOI
+https://thayduy.github.io/react-native-thuc-chien/docs/CHUONG_6_LT_MOI
+https://thayduy.github.io/react-native-thuc-chien/docs/CHUONG_7_LT_MOI
+Quy định phòng thi
+1. Thư mục project: KTXGo_<MSSV>. React Native CLI + TypeScript. Không dùng Expo làm bài chính (được cài Expo Module cho Location/Haptic như giáo trình).
+2. Style bằng StyleSheet.create. Cấm className, cấm file .css.
+3. Bắt buộc: FlashList numColumns={2}, React Navigation (Stack+Tabs), Zustand (+persist), TanStack Query, Axios, Location+Haptic. Cấm Redux Toolkit, cấm Vision Camera. Cấm copy ShopAI (#FF4D4F) và cấm nộp lại CampusMart TH1.
+4. App phải chạy được trên Simulator/Emulator. Location máy ảo được mock tọa độ — nhưng luồng xin quyền phải code đủ.
+5. Cài MSSV và họ tên thật. student.ts, watermark, stamp, repo, README và ô link trên đề phải cùng một người.
+Nộp bài — bắt buộc tạo GitHub rồi dán link
+Không nộp zip, không nộp USB. Cách nộp duy nhất:
+1. Tự tạo repo GitHub trong giờ thi (không dùng repo cũ / không dùng repo TH1). Tên = `MSSV_TH2` (vd 22612345_TH2).
+2. Đẩy toàn bộ source. Ít nhất 4 commit trong giờ thi, mỗi message có MSSV và chữ TH2. Cấm force-push.
+3. README.md dòng đầu: họ tên, MSSV, URL clone HTTPS, stamp, số cuối + hàng VARIANT.
+4. Ảnh: docs/screenshot-th2-home.png và docs/screenshot-th2-cart.png (đọc được dòng tên).
+5. Dán URL https://github.com/.../MSSV_TH2.git vào ô đầu tờ đề.
+Repo private thì mời giảng viên Collaborator trước hết giờ. Không dán link / link sai / repo trống = không có bài.
+Định danh — chỉ 2 ô: MSSV và họ tên
+Mở src/constants/student.ts, điền đúng bạn (họ tên IN HOA). Cấm để nguyên mẫu nếu không phải bạn. Cấm viết cứng debounce / staleTime / giá / phí ship.
+export const STUDENT = {
+  mssv: '22612345',
+  hoTen: 'NGUYEN VAN A',
+} as const;
+const soCuoi = Number(STUDENT.mssv.slice(-1));
+export const LAST_DIGIT = soCuoi;
+export const STUDENT_SEED = parseInt(STUDENT.mssv.slice(-3), 10) || 1;
+export const DEBOUNCE_MS = 300 + (STUDENT_SEED % 5) * 100;
+export const STALE_TIME_MS = 10_000 + (STUDENT_SEED % 20) * 1000;
+export const PRICE_MULTIPLIER = 15000 + (STUDENT_SEED % 40) * 500;
+export const BASE_SHIP_FEE = 8000 + (STUDENT_SEED % 10) * 1000;
+export const ROOM_LABEL = `P.${100 + (STUDENT_SEED % 400)}`;
+export const BANNER_IMAGE_ID = 200 + (STUDENT_SEED % 150);
+export const VARIANT = {
+  watermarkAtTop: LAST_DIGIT % 2 === 0,
+  authField: LAST_DIGIT % 2 === 0 ? 'email' : 'phone',
+  tabOrder: LAST_DIGIT >= 5 ? 'cartFirst' : 'shopFirst',
+  hapticOnAdd: LAST_DIGIT % 3 === 0 ? 'impact' : 'selection',
+  shipFormula: LAST_DIGIT % 2 === 0 ? 'A' : 'B',
+  detailPresentation: LAST_DIGIT >= 5 ? 'modal' : 'card',
+} as const;
+export function examStamp(): string {
+  const raw = `TH2|${STUDENT.mssv}|${STUDENT.hoTen}`;
+  let h = 5381;
+  for (let i = 0; i < raw.length; i++) {
+    h = Math.imul(h, 33) ^ raw.charCodeAt(i);
+  }
+  return String(Math.abs(h) % 1000000).padStart(6, '0');
+}
+Trên mọi màn chính, một dòng tên phải hiện:
+TH2 · {mssv} · {hoTen} · #{examStamp()}
+Ví dụ: TH2 · 22612345 · NGUYEN VAN A · #4F21A9
+Các số lấy từ file trên, không gõ tay:
+•  Debounce: useDebouncedValue(..., DEBOUNCE_MS)
+•  React Query: staleTime: STALE_TIME_MS
+•  Giá: Math.round(price * PRICE_MULTIPLIER) + toLocaleString('vi-VN') + ' đ'
+•  Key list: ` ${STUDENT.mssv}-${item.id} 
+•  Phòng giao: ROOM_LABEL — Persist key giỏ: ` ktxgo-cart-${mssv} 
+package.json name: ktxgo-<mssv>. Dòng đầu App.tsx: // TH2 | MSSV | HO TEN | #STAMP.
+Biến thể theo chữ số cuối MSSV
+Lấy một chữ số cuối MSSV, làm đúng hàng. Ví dụ 22612345 → 5 → watermark dưới, phone, tab Giỏ trước, haptic selection, phí B, Detail modal. Phải đọc VARIANT. Copy y chang bạn cạnh = sai.
+Số cuối
+Watermark
+Ô Login
+Thứ tự Tab
+Haptic
+Phí
+Detail
+0
+Trên
+email
+Shop→Giỏ→Tôi
+impact
+A
+card
+1
+Dưới
+phone
+Shop→Giỏ→Tôi
+selection
+B
+card
+2
+Trên
+email
+Shop→Giỏ→Tôi
+selection
+A
+card
+3
+Dưới
+phone
+Shop→Giỏ→Tôi
+impact
+B
+card
+4
+Trên
+email
+Shop→Giỏ→Tôi
+selection
+A
+card
+5
+Dưới
+phone
+Giỏ→Shop→Tôi
+selection
+B
+modal
+6
+Trên
+email
+Giỏ→Shop→Tôi
+impact
+A
+modal
+7
+Dưới
+phone
+Giỏ→Shop→Tôi
+selection
+B
+modal
+8
+Trên
+email
+Giỏ→Shop→Tôi
+selection
+A
+modal
+9
+Dưới
+phone
+Giỏ→Shop→Tôi
+impact
+B
+modal
+Công thức phí ship (km Haversine tới tọa độ cổng KTX cố định trong code):
+•  A: BASE_SHIP_FEE + Math.round(km * 2000)
+•  B: BASE_SHIP_FEE + Math.round(km * 1500) + 2000
+Màu KTXGo
+Trong theme.ts (không #FF4D4F, không teal CampusMart #0F766E):
+•  primary #1D4ED8 — nút, tab chọn, giá
+•  secondary #F97316 — badge giỏ, phí ship
+•  background #EFF6FF — nền sáng
+•  surface #FFFFFF — card
+•  text #1E3A8A · textLight #64748B · border #BFDBFE
+•  error #DC2626 · success #16A34A
+Giao diện 1 — Đăng nhập (Auth)
+Chưa có token Zustand → chỉ thấy Login. Ô nhập email hoặc phone đúng bảng số cuối. Nút Vào cửa hàng lưu token giả ktxgo-{mssv}-{stamp} rồi vào Main Tabs.
+Hình 1. Login KTXGo — nền #EFF6FF, nút primary #1D4ED8.
+Giao diện 2 — Tab Cửa hàng (FlashList lưới 2 cột)
+Dựng giống màu và bố cục hình dưới. Watermark trên/dưới theo số cuối. Ô tìm dùng chuỗi đã debounce. Bấm + → thêm giỏ + Haptic; bấm card → Detail.
+Hình 2. Home — FlashList numColumns={2}, badge giỏ, pull-to-refresh.
+Đọc hình:
+(0) STUDENT + examStamp(), không gõ cứng tên người khác.
+(A) Header KTXGO + Giao tận {ROOM_LABEL}.
+(B) Ô tìm controlled; filter theo bản debounce DEBOUNCE_MS.
+(C) FlashList 2 cột; không bọc ScrollView dọc; key ghép mssv.
+Ba cảnh mạng (thiếu một = sai Câu 2b):
+Hình 3. Đang tải · Có dữ liệu lưới · Lỗi mạng (có MSSV + Thử lại).
+Giao diện 3 — Chi tiết món (Stack)
+route.params.id. Presentation card hoặc modal theo bảng. Nút Thêm vào giỏ → Zustand + Haptic + Alert có MSSV.
+Hình 4. Detail — Stack push từ Home.
+Giao diện 4 — Tab Giỏ + Tab Tôi
+Giỏ: sửa SL, xoá, tổng tiền, ROOM_LABEL, phí ship (nếu đã có location). Persist AsyncStorage. Tôi: 3 nhánh quyền Location + Haversine + công thức A/B + openSettings khi blocked + Đăng xuất.
+Hình 5. Tab Giỏ (trái) và Tab Tôi / Location (phải).
+Dữ liệu món & mạng
+Axios apiClient.ts (axios.create + interceptor gắn X-Student-Id: {mssv}). GET https://fakestoreapi.com/products?limit=12 qua useQuery. App.tsx: SafeAreaProvider → QueryClientProvider → NavigationContainer → RootNavigator.
+Cây thư mục (không đổi tên file bắt buộc)
+KTXGo_<MSSV>/
+├── README.md
+├── App.tsx
+├── package.json
+├── babel.config.js
+├── tsconfig.json
+└── src/
+    ├── constants/student.ts
+    ├── constants/theme.ts
+    ├── hooks/useDebouncedValue.ts
+    ├── hooks/useCampusLocation.ts
+    ├── services/apiClient.ts
+    ├── services/productApi.ts
+    ├── stores/authStore.ts
+    ├── stores/cartStore.ts
+    ├── navigation/RootNavigator.tsx
+    ├── navigation/AuthStack.tsx
+    ├── navigation/MainTabs.tsx
+    ├── navigation/ShopStack.tsx
+    ├── components/ProductCard.tsx
+    ├── components/Watermark.tsx
+    └── screens/
+        ├── LoginScreen.tsx
+        ├── HomeScreen.tsx
+        ├── DetailScreen.tsx
+        ├── CartScreen.tsx
+        └── MeScreen.tsx
+Alias @screens @components @constants @services @stores @hooks @navigation. Cấm ../../../. Không làm: thanh toán thật, i18n, Lottie, Drawer, Vision Camera, Redux.
+Câu 1: (3 điểm) — Navigation + định danh
+Kiến trúc điều hướng Auth/Main + cá nhân hoá theo MSSV.
+a)  (1,5 điểm)
+•  RN CLI + TS, thư mục KTXGo_<MSSV>, name ktxgo-<mssv>, đủ cây + alias.
+•  student.ts đủ seed + VARIANT + examStamp (raw có TH2|).
+•  RootNavigator / AuthStack / MainTabs / ShopStack; Detail nhận { id: string }.
+•  Login đúng email/phone theo số cuối; có token → Main.
+•  Repo `MSSV_TH2`, ≥ push, README đủ, đã dán link vào tờ đề.
+Đạt khi: đúng VARIANT của bạn; link GitHub mở được.
+b)  (1,5 điểm)
+•  Thứ tự Tab đúng shopFirst / cartFirst.
+•  tabBarBadge = tổng SL Zustand (ẩn khi 0).
+•  Watermark mọi màn; Detail presentation đúng bảng; SafeArea không bị che.
+Đạt khi: máy ảo thấy đúng thứ tự tab của chính bạn.
+Câu 2: (3 điểm) — FlashList + React Query
+Bám Giao diện 2.
+a)  (1,5 điểm)
+•  FlashList numColumns={2}, estimatedItemSize (v1), keyExtractor ghép mssv.
+•  ProductCard tách file; flexbox lưới ổn định.
+•  useDebouncedValue đúng DEBOUNCE_MS; không bọc FlashList trong ScrollView dọc.
+Đạt khi: lưới 2 cột; gõ nhanh có độ trễ filter.
+b)  (1,5 điểm)
+•  Axios instance + interceptor X-Student-Id.
+•  useQuery đủ pending / error / data; lỗi có MSSV + refetch; pull-to-refresh = refetch.
+•  Bấm card → Detail đúng id.
+Đạt khi: tắt mạng ra lỗi; Thử lại / refresh hoạt động.
+Câu 3: (4 điểm) — Zustand + Location/Haptic
+Bám Giao diện 3–4.
+a)  (2 điểm)
+•  cartStore: add / remove / changeQty / totalQuantity / totalAmount.
+•  Persist AsyncStorage, key có MSSV; reload còn giỏ.
+•  Nút + (Home) và Thêm giỏ (Detail) cùng store + Haptic đúng VARIANT.
+•  CartScreen đủ SL / xoá / tổng / ROOM_LABEL.
+Đạt khi: thêm từ 2 màn cùng thấy ở Giỏ; persist sống sau reload.
+b)  (2 điểm)
+•  useCampusLocation: granted / denied / blocked; blocked → Linking.openSettings().
+•  Haversine + phí đúng công thức A hoặc B + BASE_SHIP_FEE (không hard-code phí cuối).
+•  Phí hiện ở Me và phản ánh Cart khi có; Đăng xuất về Login.
+•  ≥ 4 commit TH2, đủ 2 ảnh screenshot, kiểm tra ô link GitHub.
+Đạt khi: hook đủ nhánh quyền; phí theo seed/MSSV; repo *_TH2 mở được.
+Trước khi nộp tờ đề — chép lại link GitHub (nếu ô đầu đề còn trống thì dán vào đây):
+LINK GITHUB NỘP BÀI  (clone HTTPS)  —  tự tạo repo MSSV_TH2 trong giờ thi
+https://github.com/……………………………………………………………………………………
+— Hết —
+Lưu ý
+Đề thi được sử dụng tài liệu. Không copy ShopAI, không nộp lại CampusMart TH1, không copy bài người khác. Hai MSSV khác nhau phải ra hai biến thể khác nhau.
+PHIẾU CHẤM KIỂM TRA
+Chuẩn
+đầu ra
+NỘI DUNG
+Thang
+điểm 10
+Thang
+điểm 4
+Điểm
+chuẩn
+Sinh viên
+thực hiện
+Mức 1
+Mức 2
+Mức 3
+Mức 4
+CDRMH 1
+CDRMH 1
+Câu 1a
+10
+4
+1.5
+≤ 0.5đ
+≤ 0.5đ
+> 0.5đ – 1.5đ
+> 0.5đ – 1.5đ
+> 1.5đ – 2.5đ
+> 1.5đ – 2.5đ
+> 2.5đ – 3đ
+> 2.5đ – 3đ
+Câu 1b
+10
+4
+1.5
+CDRMH 2
+CDRMH 2
+Câu 2a
+10
+4
+1.5
+≤ 0.5đ
+≤ 0.5đ
+> 0.5đ – 1.5đ
+> 0.5đ – 1.5đ
+> 1.5đ – 2.5đ
+> 1.5đ – 2.5đ
+> 2.5đ – 3đ
+> 2.5đ – 3đ
+Câu 2b
+10
+4
+1.5
+CDRMH 3
+CDRMH 3
+Câu 3a
+10
+4
+2
+≤ 1đ
+≤ 1đ
+> 1đ – 2đ
+> 1đ – 2đ
+> 2đ – 3đ
+> 2đ – 3đ
+> 3đ – 4đ
+> 3đ – 4đ
+Câu 3b
+10
+4
+2
+Tổng số điểm
+10
+SV xác nhận
+………………………………
+(Ký, ghi rõ họ tên)
+Giảng viên chấm
+Ths. NGUYỄN VĂN DUY
+Mẫu: 2a_ĐTTL  —  Khoa CN Điện tử  —  IUH  —  THỰC HÀNH 2 (KTXGo)
